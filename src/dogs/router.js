@@ -2,7 +2,7 @@ import express from 'express'
 import { addDogZodSchema, updateDogZodSchema } from './schema.js'
 import { parser } from './parser-middleware.js'
 
-function CreateRouter(dependencies){
+function CreateRouter(dependencies, discord){
 
 const {saveDog, loadDogs, updateDog, removeDog, getDogByBreed} = dependencies
 const dogsRouter = express.Router()
