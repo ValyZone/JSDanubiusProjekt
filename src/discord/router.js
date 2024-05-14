@@ -1,43 +1,54 @@
-//import {} from 'messages.js'
-import express from 'express'
-import { sendDiscordMessageZodSchema } from '../common/schema.js'
-import { parser } from '../common/parser-middleware.js'
-import { Client, IntentsBitField } from 'discord.js'
+import express from 'express';
+import { sendDiscordMessageZodSchema } from '../common/schema.js';
+import { parser } from '../common/parser-middleware.js';
+import {startBot} from './bot.js'
+import { addUserZodSchema, updateUserZodSchema } from '../common/schema.js'
 
-function CreateDiscordRouter(dependencies){
-    //DISCORD SIDE
-    const discord = new Client({
-        intents: [
-            IntentsBitField.Flags.Guilds,
-            IntentsBitField.Flags.GuildMembers,
-            IntentsBitField.Flags.GuildMessages,
-            IntentsBitField.Flags.MessageContent,
-        ],
-    })
-    
-    discord.login('MTIzODU2NzA0NzE0MzYyNDcxNA.G6zXWS.lmnEeQtW9pr7UiTscA6smpVDryh7Gs1QUAM3Fo')
-    discord.on('ready', (c) => {
-        console.log(`  [!] ${c.user.displayName} is Online!`)
-    })
+function CreateDiscordRouter(dependencies) {
+    const client = startBot();
 
-    discord.on('messageCreate', (message) => {
-        
-    })
+    const usersRouter = express.Router();
+    const { loadUsers, saveUser, updateUser, removeUser, getUserByName } = dependencies;
 
-    //REQUESTS SIDE
-    const usersRouter = express.Router()
-    const { loadUsers, saveUser, updateUser, removeUser, getUserByName } = dependencies
-
-    usersRouter.post('/sendMessage', parser(sendDiscordMessageZodSchema), async (req, res, next) => { 
+    usersRouter.post('/sendMessage', parser(sendDiscordMessageZodSchema), async (req, res, next) => {
         try {
-            channel.send(res.locals.parsed.message);
-            res.status(201).send("Message sent.")
+            client.channels.cache.get('1239923748988260372').send(res.locals.parsed.message)
+            res.status(201).send("Message sent.");
+        } catch (err) {
+            next(err);
+        }
+    });
+
+    usersRouter.get('/:name', async (req, res, next) => {
+        try{
+            const user = await getUserByName(req.params.name)
+            res.json(user)
+            
+        } catch(err){
+            next(err)
+        }
+    })
+
+    usersRouter.post('', parser(addUserZodSchema), async (req, res, next) => { 
+        try {
+            await saveUser({...res.locals.parsed})
+            res.status(201).send(res.locals.parsed.name + " created.")
         } catch (err) {
             next(err)
         }
     })
 
-    return usersRouter
+    usersRouter.put('/:name', parser(updateUserZodSchema), async (req, res, next) => {
+        try {
+            await updateUser({...res.locals.parsed, name : req.params.name})
+            res.status(204).send(res.locals.parsed.name + " updated.")
+        } catch(err){
+            next(err)
+        }
+    })
+
+    return usersRouter;
 }
+
 
 export default CreateDiscordRouter

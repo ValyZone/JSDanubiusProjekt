@@ -3,8 +3,6 @@ import { errorHandler } from './dogs/error-handling.js'
 import CreateDogsRouter from './dogs/router.js'
 import CreateDiscordRouter from './discord/router.js'
 
-
-
 export function CreateApp(dependencies) {
     const {saveDog, loadDogs, updateDog, removeDog, getDogByBreed, loadUsers, saveUser, updateUser, removeUser, getUserByName } = dependencies
     const breedsDependencies = { saveDog, loadDogs, updateDog, removeDog, getDogByBreed }

@@ -12,6 +12,17 @@ export const updateDogZodSchema = z.object({
     description: z.string()
 }).strict()
 
+export const addUserZodSchema = z.object({
+    name: z.string(),
+    
+})
+
+export const updateUserZodSchema = z.object({
+    name: z.string(),
+    permission: z.string(),
+    discordId: z.string()
+})
+
 export const sendDiscordMessageZodSchema = z.object({
     message: z.string()
 }).strict()

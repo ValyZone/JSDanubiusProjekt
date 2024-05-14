@@ -45,6 +45,11 @@ export async function connectToMongo(dbUrl){
 
 
         //DISCORD
+
+        //Ranks:
+        //User
+        //Developer
+
         async loadUsers(){ 
             return usersCollection.find({}).toArray()
         },
@@ -52,18 +57,25 @@ export async function connectToMongo(dbUrl){
             await usersCollection.insertOne(
             {
                 name : user.name,
-                rank : user.rank,
-                contacts : user.contacts
+                permission : 'user',
+                discordId : '000000000000000000'
+            })
+        },
+        saveUserDiscord: async (user) => {
+            await usersCollection.insertOne(
+            {
+                name : user.name,
+                permission : 'user',
+                discordId : '000000000000000000'
             })
         },
         updateUser: (user) => {
-            const { name, rank, contacts } = user
+            const { name, permission, discordId } = user
             usersCollection.updateOne({name},
                 {
                     $set: {
-                        //can i set a new name? //TODO
-                        rank,
-                        contacts
+                        permission,
+                        discordId
                     },
                 }
             )
