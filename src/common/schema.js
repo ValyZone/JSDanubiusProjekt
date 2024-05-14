@@ -11,3 +11,7 @@ export const updateDogZodSchema = z.object({
     origin: z.string(),
     description: z.string()
 }).strict()
+
+export const sendDiscordMessageZodSchema = z.object({
+    message: z.string()
+}).strict()

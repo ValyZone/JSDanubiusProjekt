@@ -1,8 +1,8 @@
 import express from 'express'
-import { addDogZodSchema, updateDogZodSchema } from './schema.js'
-import { parser } from './parser-middleware.js'
+import { addDogZodSchema, updateDogZodSchema } from '../common/schema.js'
+import { parser } from '../common/parser-middleware.js'
 
-function CreateRouter(dependencies, discord){
+function CreateDogsRouter(dependencies){
 
 const {saveDog, loadDogs, updateDog, removeDog, getDogByBreed} = dependencies
 const dogsRouter = express.Router()
@@ -64,5 +64,5 @@ dogsRouter.put('/:breed', parser(updateDogZodSchema), async (req, res, next) => 
 
 return dogsRouter
 }
-export default CreateRouter
+export default CreateDogsRouter
 
