@@ -8,7 +8,7 @@ export async function connectToMongo(dbUrl){
     const usersCollection = db.collection('Users')
     const dogsCollection = db.collection('Breeds')
 
-    await usersCollection.createIndex( {userId: 1}, {unique: true} )
+    await usersCollection.createIndex( {name: 1}, {unique: true} )
     await dogsCollection.createIndex( {breed: 1}, {unique: true} )
 
     return{
@@ -58,15 +58,7 @@ export async function connectToMongo(dbUrl){
             {
                 name : user.name,
                 permission : 'user',
-                discordId : '000000000000000000'
-            })
-        },
-        saveUserDiscord: async (user) => {
-            await usersCollection.insertOne(
-            {
-                name : user.name,
-                permission : 'user',
-                discordId : '000000000000000000'
+                discordId : 'null'
             })
         },
         updateUser: (user) => {

@@ -5,7 +5,7 @@ import {startBot} from './bot.js'
 import { addUserZodSchema, updateUserZodSchema } from '../common/schema.js'
 
 function CreateDiscordRouter(dependencies) {
-    const client = startBot();
+    const client = startBot(dependencies);
 
     const usersRouter = express.Router();
     const { loadUsers, saveUser, updateUser, removeUser, getUserByName } = dependencies;

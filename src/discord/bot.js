@@ -1,6 +1,8 @@
 import { Client, IntentsBitField } from 'discord.js';
+import { resolveCommand } from './messages.js'
 
-export function startBot(){
+export function startBot(dependencies){
+
     const discord = new Client({
         intents: [
             IntentsBitField.Flags.Guilds,
@@ -16,14 +18,34 @@ export function startBot(){
     });
 
     discord.on('messageCreate', (message) => {
-        if (message.channel == '1239926064847786014'){
-            if (message.content != '' && message.content[0] == '!'){
-                message.reply('ok')
-            }
-            else if (!message.author.bot){
-                message.delete()
+        const commands = [
+            'reg',
+            'update',
+            'delete',
+            'help'
+        ]
+        if(!message.author.bot){
+            if (message.channel == '1239926064847786014'){ //danubot-commands
+
+                if (message.content != '' && message.content[0] == '!'){
+                    const params = message.content.split('!')[1].toLowerCase().split(' ') ? 
+                            message.content.split('!')[1].toLowerCase().split(' ') : 
+                            message.content.split('!')[1].toLowerCase()
+
+                    if(commands.includes(params[0])){
+                        message.author.globalName = message.author.globalName.toLowerCase()
+                        resolveCommand(message, dependencies)
+                    }
+                    else{
+                        message.reply('Unknown command, type "!help".')
+                    }
+                }
+                else {
+                    message.delete()
+                }
             }
         }
+        
     });
     return discord
 }
