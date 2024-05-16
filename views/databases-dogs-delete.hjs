@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dogs Table</title>
+    <title>Dog deletion</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -87,7 +87,7 @@
                             }
                             window.location.href = '/databases/dogs/delete/succesfull';
                         })
-                        .catch(error => console.error('Error updating dog:', error));
+                        .catch(error => console.error('Error deleting dog:', error));
                     });
                     dogsTableBody.appendChild(button);
                 });

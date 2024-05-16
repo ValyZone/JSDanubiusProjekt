@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dogs Table</title>
+    <title>Dog Update</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -91,9 +91,9 @@
     <div id="popupForm" class="form-popup">
         <form id="updateForm" class="form-container">
             <label for="origin"><b>Origin</b></label>
-            <input type="text" name="origin" required>
+            <input type="text" name="origin">
             <label for="description"><b>Description</b></label>
-            <input type="text" name="description" required>
+            <input type="text" name="description">
             <input type="submit" value="Submit">
         </form>
     </div>

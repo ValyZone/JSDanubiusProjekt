@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>New Dog</title>
+    <title>User registration</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -49,15 +49,9 @@
     </style>
 </head>
 <body>
-    <form action="/databases/dogs/post/form" method="post">
-        <label for="field1">Breed:</label>
-        <input type="text" id="field1" name="breed" required>
-
-        <label for="field2">Origin:</label>
-        <input type="text" id="field2" name="origin" required>
-
-        <label for="field3">Description:</label>
-        <input type="text" id="field3" name="description" required>
+    <form action="/databases/users/reg/form" method="post">
+        <label for="field1">Discord username:</label>
+        <input type="text" id="field1" name="name" required>
 
         <input type="submit" value="Submit">
     </form>

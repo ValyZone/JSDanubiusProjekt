@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buttons</title>
+    <title>Dog updated</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -44,7 +44,7 @@
     <h1>Dog updated succesfully!</h1>
     <div class="button-container">
         <p>Choose an action:</p>
-        <a href="/databases/dogs/put" class="button">Try again</a>
+        <a href="/databases/dogs/put" class="button">Update another one</a>
         <a href="/databases/dogs" class="button">Back to Dogs database</a>
     </div>
 </body>

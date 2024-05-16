@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Redirect Page</title>
+    <title>Danubius Project</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -42,6 +42,7 @@
     </style>
 </head>
 <body>
+    <h4>by Gyurka Valentin</h4>
     <h1>Choose a page to redirect:</h1>
     <div class="button-container">
         <a href="/databases" class="button">Avaible Databases</a>

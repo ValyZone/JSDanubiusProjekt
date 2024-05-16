@@ -4,7 +4,7 @@ import CreateDogsRouter from './dogs/router.js'
 import CreateDiscordRouter from './discord/router.js'
 import {dirname, join} from 'node:path'
 import {fileURLToPath} from 'node:url'
-import { DefaultWebSocketManagerOptions } from 'discord.js'
+//import { DefaultWebSocketManagerOptions } from 'discord.js'
 
 export function CreateApp(dependencies) {
     const {saveDog, loadDogs, updateDog, removeDog, getDogByBreed, loadUsers, saveUser, updateUser, removeUser, getUserByName } = dependencies
@@ -22,7 +22,8 @@ export function CreateApp(dependencies) {
         res.render('index')
     })
 
-    //DATABASES
+    // <-- DATABASES -->
+
     app.get('/databases', (req, res, next) => {
         res.render('databases')
     })
@@ -38,6 +39,7 @@ export function CreateApp(dependencies) {
     app.post('/databases/dogs/post/form', async (req, res, next) => {
         try{
             const { breed, origin, description } = req.body
+            breed = breed.toLowerCase()
             const newDog = { breed, origin, description }
             
             const exists = await getDogByBreed(breed)
@@ -46,9 +48,8 @@ export function CreateApp(dependencies) {
             }
             else{
                 saveDog(newDog)
-                res.render('databases-dogs-post-succesfull')
+                res.render('databases-dogs-post-succesful')
             }
-
         } catch(err){
             next(err)
         }
@@ -67,8 +68,17 @@ export function CreateApp(dependencies) {
         res.render('databases-dogs-put')
     })
 
-    app.put('/databases/dogs/put/newdog', (req, res, next) => {
-        const updatedDog = req.body
+    app.put('/databases/dogs/put/newdog', async (req, res, next) => {
+        const { breed, origin, description } = req.body
+        const oldDog = await getDogByBreed(breed)
+
+        console.log(origin == '' ? oldDog.origin : origin)
+        const updatedDog = {
+            breed: breed,
+            origin: origin == '' ? oldDog.origin : origin,
+            description: description == '' ? oldDog.description : description,
+        }
+
         updateDog(updatedDog);
         res.sendStatus(204)
     })
@@ -88,15 +98,31 @@ export function CreateApp(dependencies) {
     })
 
     app.get('/databases/dogs/delete/succesfull', (req, res, next) => {
-        res.render('databases-dogs-delete-succesfull')
+        res.render('databases-dogs-delete-succesful')
     })
 
+    // <-- USERS -->
 
-    //USERS
     app.get('/databases/users', (req, res, next) => {
         res.render('databases-users')
     })
 
+    app.get('/databases/users/reg', (req, res, next) => {
+        res.render('databases-users-reg')
+    })
+
+    app.post('/databases/users/reg/form', async (req, res, next) => {
+        const { name } = req.body
+
+        const exists = await getUserByName(name.toLowerCase())
+            if (exists){
+                res.render('databases-users-reg-exists')
+            }
+            else{
+                saveUser({ name : name.toLowerCase() })
+                res.render('databases-users-reg-successful')
+            }
+    })
     app.use(async (req, res, next) => {
         console.log("Method: " + req.method + ", Path: " + req.path)
         next()

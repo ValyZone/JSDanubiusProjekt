@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Redirect Page</title>
+    <title>Dogs Database</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -36,11 +36,11 @@
             transition: background-color 0.3s;
         }
 
-        .button[href="/"] {
+        .button[href="/databases"] {
             background-color: #9370DB;
         }
 
-        .button[href="/"]:hover {
+        .button[href="/databases"]:hover {
             background-color: #663399;
         }
 
@@ -56,7 +56,7 @@
         <a href="/databases/dogs/get" class="button">Get all Dogs</a>
         <a href="/databases/dogs/put" class="button">Update existing Dog</a>
         <a href="/databases/dogs/delete" class="button">Delete existing Dog</a>
-        <a href="/" class="button">Back to Homepage</a>
+        <a href="/databases" class="button">Back to databases</a>
     </div>
 </body>
 </html>
