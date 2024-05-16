@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dogs Table</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px auto;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .button {
+            margin: 5px;
+            padding: 10px 20px;
+            background-color: #d3d3f7;
+            color: #000;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        .button:hover {
+            background-color: #a9a9d6;
+        }
+    </style>
+</head>
+<body>
+    <h1>Which one do you want to delete?</h1>
+    <div id="dogsTableBody" class="button-container"></div>
+
+    <div class="button-container">
+        <a href="/databases/dogs" class="button">Back</a>
+    </div>
+
+    <script>
+        fetch('/databases/dogs/get/alldogs')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(dogs => {
+                const dogsTableBody = document.getElementById('dogsTableBody');
+                dogs.forEach(dog => {
+                    const button = document.createElement('button');
+                    button.textContent = `${dog.breed}`;
+                    button.className = 'button';
+                    button.addEventListener('click', () => {
+                        const data = {
+                            breed: dog.breed
+                        };
+
+                        fetch('/databases/dogs/delete/process', {
+                            method: 'DELETE',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(data)
+                        })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Network response was not ok');
+                            }
+                            window.location.href = '/databases/dogs/delete/succesfull';
+                        })
+                        .catch(error => console.error('Error updating dog:', error));
+                    });
+                    dogsTableBody.appendChild(button);
+                });
+            })
+            .catch(error => console.error('Error fetching dogs:', error));
+    </script>
+
+</body>
+</html>

@@ -58,14 +58,41 @@ export function CreateApp(dependencies) {
         res.render('databases-dogs-get')
     })
 
+    app.get('/databases/dogs/get/alldogs', async (req, res) => {
+        const alldogs = await loadDogs()
+        res.json(alldogs);
+    })
+
     app.get('/databases/dogs/put', (req, res, next) => {
         res.render('databases-dogs-put')
+    })
+
+    app.put('/databases/dogs/put/newdog', (req, res, next) => {
+        const updatedDog = req.body
+        updateDog(updatedDog);
+        res.sendStatus(204)
+    })
+
+    app.get('/databases/dogs/put/updated', (req, res, next) => {
+        res.render('databases-dogs-put-updated')
     })
 
     app.get('/databases/dogs/delete', (req, res, next) => {
         res.render('databases-dogs-delete')
     })
 
+    app.delete('/databases/dogs/delete/process', (req, res, next) => {
+        const dogToDelete = req.body
+        removeDog(dogToDelete)
+        res.sendStatus(204)
+    })
+
+    app.get('/databases/dogs/delete/succesfull', (req, res, next) => {
+        res.render('databases-dogs-delete-succesfull')
+    })
+
+
+    //USERS
     app.get('/databases/users', (req, res, next) => {
         res.render('databases-users')
     })
