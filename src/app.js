@@ -1,9 +1,10 @@
 import express from 'express'
-import { errorHandler } from './dogs/error-handling.js'
+import { errorHandler, DuplicateItem } from './dogs/error-handling.js'
 import CreateDogsRouter from './dogs/router.js'
 import CreateDiscordRouter from './discord/router.js'
 import {dirname, join} from 'node:path'
 import {fileURLToPath} from 'node:url'
+import { DefaultWebSocketManagerOptions } from 'discord.js'
 
 export function CreateApp(dependencies) {
     const {saveDog, loadDogs, updateDog, removeDog, getDogByBreed, loadUsers, saveUser, updateUser, removeUser, getUserByName } = dependencies
@@ -19,6 +20,54 @@ export function CreateApp(dependencies) {
 
     app.get('/', (req, res, next) => {
         res.render('index')
+    })
+
+    //DATABASES
+    app.get('/databases', (req, res, next) => {
+        res.render('databases')
+    })
+
+    app.get('/databases/dogs', (req, res, next) => {
+        res.render('databases-dogs')
+    })
+
+    app.get('/databases/dogs/post', (req, res, next) => {
+        res.render('databases-dogs-post')
+    })
+
+    app.post('/databases/dogs/post/form', async (req, res, next) => {
+        try{
+            const { breed, origin, description } = req.body
+            const newDog = { breed, origin, description }
+            
+            const exists = await getDogByBreed(breed)
+            if (exists){
+                res.render('databases-dogs-post-exists')
+            }
+            else{
+                saveDog(newDog)
+                res.render('databases-dogs-post-succesfull')
+            }
+
+        } catch(err){
+            next(err)
+        }
+    })
+
+    app.get('/databases/dogs/get', (req, res, next) => {
+        res.render('databases-dogs-get')
+    })
+
+    app.get('/databases/dogs/put', (req, res, next) => {
+        res.render('databases-dogs-put')
+    })
+
+    app.get('/databases/dogs/delete', (req, res, next) => {
+        res.render('databases-dogs-delete')
+    })
+
+    app.get('/databases/users', (req, res, next) => {
+        res.render('databases-users')
     })
 
     app.use(async (req, res, next) => {

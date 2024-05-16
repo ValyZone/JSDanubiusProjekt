@@ -9,6 +9,17 @@ export class NotFoundError extends Error{
     }
 }
 
+export class DuplicateItem extends Error{
+    constructor(message){
+        super(message)
+        this.name = this.constructor.name
+        if (Error.captureStackTrace)
+        {
+            Error.captureStackTrace(this, this.constructor)
+        }
+    }
+}
+
 function mapErrorToStatusCode(err){
     switch(err.name){
         case 'NotFoundError':

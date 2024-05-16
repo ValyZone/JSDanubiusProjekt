@@ -3,22 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Redirect Page</title>
+    <title>Buttons</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f0f0f0;
             padding: 20px;
         }
-
+        
         h1 {
-            color: #333;
             text-align: center;
         }
 
         .button-container {
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
             margin-top: 20px;
         }
@@ -26,7 +25,7 @@
         .button {
             display: inline-block;
             padding: 10px 20px;
-            margin: 10px;
+            margin: 0 10px;
             background-color: #007BFF;
             color: #fff;
             border: none;
@@ -42,10 +41,11 @@
     </style>
 </head>
 <body>
-    <h1>Choose a page to redirect:</h1>
+    <h1>Dog added succesfully!</h1>
     <div class="button-container">
-        <a href="/databases" class="button">Avaible Databases</a>
-        <a href="/discord" class="button"> DanuBot </a>
+        <p>Choose an action:</p>
+        <a href="/databases/dogs/post" class="button">Try again</a>
+        <a href="/databases/dogs" class="button">Back to Dogs database</a>
     </div>
 </body>
 </html>

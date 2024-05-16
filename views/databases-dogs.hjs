@@ -36,6 +36,14 @@
             transition: background-color 0.3s;
         }
 
+        .button[href="/"] {
+            background-color: #9370DB;
+        }
+
+        .button[href="/"]:hover {
+            background-color: #663399;
+        }
+
         .button:hover {
             background-color: #0056b3;
         }
@@ -44,8 +52,11 @@
 <body>
     <h1>Choose a page to redirect:</h1>
     <div class="button-container">
-        <a href="/databases" class="button">Avaible Databases</a>
-        <a href="/discord" class="button"> DanuBot </a>
+        <a href="/databases/dogs/post" class="button">Create new Dog</a>
+        <a href="/databases/dogs/get" class="button">Get all Dogs</a>
+        <a href="/databases/dogs/put" class="button">Update existing Dog</a>
+        <a href="/databases/dogs/delete" class="button">Delete existing Dog</a>
+        <a href="/" class="button">Back to Homepage</a>
     </div>
 </body>
 </html>
