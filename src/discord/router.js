@@ -21,7 +21,6 @@ function CreateDiscordRouter(dependencies) {
     
     usersRouter.post('/sendMessage/web',  (req, res, next) => {
         try {
-            console.log(req.body)
             const { message } = req.body
             client.channels.cache.get('1239923748988260372').send(message.toString())
             res.redirect('/danubot/announcement/successful')

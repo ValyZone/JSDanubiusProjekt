@@ -49,7 +49,7 @@
     </style>
 </head>
 <body>
-    <form action="/danubot/announcement/process" method="post">
+    <form action="/databases/users/reg/form" method="post">
         <label for="field1">Discord username:</label>
         <input type="text" id="field1" name="name" required>
 

@@ -40,7 +40,7 @@ export function CreateApp(dependencies) {
 
     app.post('/databases/dogs/post/form', async (req, res, next) => {
         try{
-            const { breed, origin, description } = req.body
+            let { breed, origin, description } = req.body
             breed = breed.toLowerCase()
             const newDog = { breed, origin, description }
             
@@ -151,7 +151,7 @@ export function CreateApp(dependencies) {
     })
 
     app.use("/dogs", CreateDogsRouter(breedsDependencies))
-    app.use("/discord", CreateDiscordRouter(usersDependencies))
+    app.use("/discord", CreateDiscordRouter(dependencies))
 
     app.use(errorHandler)
 

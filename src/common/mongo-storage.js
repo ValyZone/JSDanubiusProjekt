@@ -36,8 +36,8 @@ export async function connectToMongo(dbUrl){
                 }
             )
         },
-        removeDog: async (breed) => {
-            await dogsCollection.deleteOne(breed)
+        removeDog: async (dog) => {
+            await dogsCollection.deleteOne(dog)
         },
         getDogByBreed(breed){
             return dogsCollection.findOne({breed}, {projection: {_id: 0}})

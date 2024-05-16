@@ -20,8 +20,11 @@ export function startBot(dependencies){
     discord.on('messageCreate', (message) => {
         const commands = [
             'reg',
-            'update',
-            'remove',
+            'updateuser',
+            'removeuser',
+            'createdog',
+            'getdogs',
+            'removedog',
             'help'
         ]
         if(!message.author.bot){

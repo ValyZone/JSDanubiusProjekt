@@ -1,7 +1,7 @@
 
 
 export async function resolveCommand(message, commands, dependencies){
-    const { loadUsers, saveUser, updateUser, removeUser, getUserByName } = dependencies;
+    const { loadUsers, saveUser, updateUser, removeUser, getUserByName, getDogByBreed, loadDogs, saveDog, removeDog } = dependencies;
     const params = message.content.split('!')[1].toLowerCase().split(' ') ? message.content.split('!')[1].toLowerCase().split(' ') : message.content.split('!')[1].toLowerCase() //undefined kivédés
     const user = await getUserByName(message.author.globalName) ? await getUserByName(message.author.globalName) : await getUserByName(message.author.discordId)
 
@@ -23,7 +23,7 @@ export async function resolveCommand(message, commands, dependencies){
                 message.reply("Please register on webapp first with your discord username.")
             }
             break;
-        case 'update':
+        case 'updateuser':
             //make it so it can't update itself
             const permissionsList = [
                 {permissionName : 'user', roleId : '1239885429717729280'},
@@ -53,7 +53,7 @@ export async function resolveCommand(message, commands, dependencies){
             }
             else { message.reply("Please register on webapp first with your discord username.") }
             break;
-        case 'remove':
+        case 'removeuser':
             if (user) {
                 if (user.permission == 'developer'){
                     const affectedUser = await getUserByName(params[1])
@@ -65,11 +65,60 @@ export async function resolveCommand(message, commands, dependencies){
                         affectedUserDiscord.roles.add('1239885429717729280')
 
                         removeUser(affectedUser)
-                        message.reply(`User ${params[1]} has been removed.`)
+                        message.reply(`User '${params[1]}' has been removed.`)
                     }
-                    else { message.reply(`User with the name ${params[1]} doesn't exist.`) }
+                    else { message.reply(`User with the name '${params[1]}' doesn't exist.`) }
                 }
                 else { message.reply("You don't have permission to remove this user.") }
+            }
+            else { message.reply("Please register on webapp first with your discord username.") }
+            break;
+        case 'getdogs':
+            if (user) {
+                const dogs = await loadDogs()
+                let idx = 1
+                dogs.forEach(dog => message.client.channels.cache.get('1239926064847786014').send(
+                `[${idx++}]------------------------------------------\n
+                **Breed**: ${dog.breed}\n
+                **Origin**: ${dog.origin}\n
+                **Description**: ${dog.description}`
+                ))
+                message.client.channels.cache.get('1239926064847786014').send('---------------------------------------------')
+            }
+            else { message.reply("Please register on webapp first with your discord username.") }
+            break;
+        case 'removedog':
+            if (user) {
+                if (user.permission == 'developer'){
+                    const affectedDog = await getDogByBreed(params[1])
+
+                    if (affectedDog){
+                        removeDog(affectedDog)
+                        message.reply(`'${params[1]}' has been removed.`)
+                    }
+                    else { message.reply(`Dog with the breed '${params[1]}' doesn't exist.`) }
+                }
+                else { message.reply("You don't have permission to remove this dog.") }
+            }
+            else { message.reply("Please register on webapp first with your discord username.") }
+            break;
+        case 'createdog':
+            if (user) {
+                if (user.permission == 'developer'){
+                    const oldDog = await getDogByBreed(params[1])
+
+                    if (!oldDog){
+                        let description = ""
+                        let copyParams = params
+                        const lastParams = copyParams.splice(3) //used only to slice up
+                        lastParams.forEach(item => description += (item + ' '))
+                        const newDog = {breed : params[1].toLowerCase(), origin : params[2], description : description}
+                        saveDog(newDog)
+                        message.reply(`'${params[1]}' has been created.`)
+                    }
+                    else { message.reply(`Dog with the breed '${params[1]}' doesn't exist.`) }
+                }
+                else { message.reply("You don't have permission to add new dog.") }
             }
             else { message.reply("Please register on webapp first with your discord username.") }
             break;
