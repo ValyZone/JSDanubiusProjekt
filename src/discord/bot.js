@@ -21,7 +21,7 @@ export function startBot(dependencies){
         const commands = [
             'reg',
             'update',
-            'delete',
+            'remove',
             'help'
         ]
         if(!message.author.bot){
@@ -34,7 +34,7 @@ export function startBot(dependencies){
 
                     if(commands.includes(params[0])){
                         message.author.globalName = message.author.globalName.toLowerCase()
-                        resolveCommand(message, dependencies)
+                        resolveCommand(message, commands, dependencies)
                     }
                     else{
                         message.reply('Unknown command, type "!help".')
