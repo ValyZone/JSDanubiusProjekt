@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Danubius Project</title>
+    <title>Databases</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
+            background-color: #2e2b2b;
             padding: 20px;
         }
 
         h1 {
-            color: #333;
+            color: #999292;
             text-align: center;
         }
 
@@ -36,17 +36,24 @@
             transition: background-color 0.3s;
         }
 
+        .button[href="/"] {
+            background-color: #9370DB;
+        }
+
+        .button[href="/"]:hover {
+            background-color: #663399;
+        }
+
         .button:hover {
             background-color: #0056b3;
         }
     </style>
 </head>
 <body>
-    <h4>by Gyurka Valentin</h4>
     <h1>Choose a page to redirect:</h1>
     <div class="button-container">
-        <a href="/databases" class="button">Avaible Databases</a>
-        <a href="/danubot" class="button"> DanuBot </a>
+        <a href="/danubot/announcement" class="button">Make an announcement</a>
+        <a href="/" class="button">Back to Homepage</a>
     </div>
 </body>
 </html>

@@ -3,22 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Danubius Project</title>
+    <title>User registration</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
+            background-color: #2e2b2b;
             padding: 20px;
         }
-
+        
         h1 {
-            color: #333;
+            color: #999292;
+            text-align: center;
+        }
+
+        h2 {
+            color: #999292;
             text-align: center;
         }
 
         .button-container {
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
             margin-top: 20px;
         }
@@ -26,7 +31,7 @@
         .button {
             display: inline-block;
             padding: 10px 20px;
-            margin: 10px;
+            margin: 0 10px;
             background-color: #007BFF;
             color: #fff;
             border: none;
@@ -42,11 +47,11 @@
     </style>
 </head>
 <body>
-    <h4>by Gyurka Valentin</h4>
-    <h1>Choose a page to redirect:</h1>
+    <h1>Message sent succesfully!!</h1>
     <div class="button-container">
-        <a href="/databases" class="button">Avaible Databases</a>
-        <a href="/danubot" class="button"> DanuBot </a>
+        <p>Choose an action:</p>
+        <a href="/danubot/announcement" class="button">Send another one</a>
+        <a href="/danubot" class="button">Back to Danubot options</a>
     </div>
 </body>
 </html>

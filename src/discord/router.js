@@ -18,6 +18,17 @@ function CreateDiscordRouter(dependencies) {
             next(err);
         }
     });
+    
+    usersRouter.post('/sendMessage/web',  (req, res, next) => {
+        try {
+            console.log(req.body)
+            const { message } = req.body
+            client.channels.cache.get('1239923748988260372').send(message.toString())
+            res.redirect('/danubot/announcement/successful')
+        } catch (err) {
+            next(err);
+        }
+    });
 
     usersRouter.get('/:name', async (req, res, next) => {
         try{

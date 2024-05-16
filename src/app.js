@@ -28,6 +28,8 @@ export function CreateApp(dependencies) {
         res.render('databases')
     })
 
+    // <-- DOGS -->
+
     app.get('/databases/dogs', (req, res, next) => {
         res.render('databases-dogs')
     })
@@ -123,6 +125,26 @@ export function CreateApp(dependencies) {
                 res.render('databases-users-reg-successful')
             }
     })
+
+    // <-- DANUBOT -->
+
+    app.get('/danubot', (req, res, next) => {
+        res.render('danubot')
+    })
+
+    app.get('/danubot/announcement', (req, res, next) => {
+        res.render('danubot-announcement')
+    })
+
+    app.get('/danubot/announcement/process', (req, res, next) => {
+        res.redirect('/discord/sendMessage/web')
+    })
+
+    app.get('/danubot/announcement/successful', (req, res, next) => {
+        res.render('danubot-announcement-successful')
+    })
+
+    //--
     app.use(async (req, res, next) => {
         console.log("Method: " + req.method + ", Path: " + req.path)
         next()
