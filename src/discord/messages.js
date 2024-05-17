@@ -6,8 +6,22 @@ export async function resolveCommand(message, commands, dependencies){
     const user = await getUserByName(message.author.globalName) ? await getUserByName(message.author.globalName) : await getUserByName(message.author.discordId)
 
     switch (params[0]){
+        case 'op':
+            if (user){
+                const newUser = user
+                newUser.discordId = message.author.id
+                newUser.permission = "developer"
+                updateUser(newUser)
+
+                const userToUpdate = await message.guild.members.fetch(newUser.discordId)
+                userToUpdate.roles.add('1239884884210745454')
+                message.reply("Whooaaa, you got access to developer permmissions!")
+            }
+            else{
+                message.reply("Please register on webapp first with your discord username.")
+            }
+            break;
         case 'reg':
-            //kezeld a bugokat
             if (user) {
                 if(user.discordId != 'null') {
                     message.reply("User with same username already exists!")
@@ -16,6 +30,9 @@ export async function resolveCommand(message, commands, dependencies){
                     const newUser = user
                     newUser.discordId = message.author.id
                     updateUser(newUser)
+
+                    const userToUpdate = await message.guild.members.fetch(newUser.discordId)
+                    userToUpdate.roles.add('1239885429717729280')
                     message.reply("User registered.")
                 }
             }
@@ -24,30 +41,33 @@ export async function resolveCommand(message, commands, dependencies){
             }
             break;
         case 'updateuser':
-            //make it so it can't update itself
             const permissionsList = [
                 {permissionName : 'user', roleId : '1239885429717729280'},
                 {permissionName : 'developer', roleId : '1239884884210745454'}
             ]
             if (user) {
                 if (user.permission == 'developer'){
-                    if (permissionsList.map(x => x.permissionName).includes(params[2])) //valid permission
-                    {
-                        const affectedUser = await getUserByName(params[1])
-                        if(affectedUser){
-                            const affectedUserDiscord = await message.guild.members.fetch(affectedUser.discordId)
+                    if (params[1] != message.author.globalName.toLowerCase()){
+                        if (permissionsList.map(x => x.permissionName).includes(params[2])) //valid permission
+                        {
+                            const affectedUser = await getUserByName(params[1])
+                            if(affectedUser){
+                                const affectedUserDiscord = await message.guild.members.fetch(affectedUser.discordId)
 
-                            affectedUserDiscord.roles.remove(permissionsList.find(x => x.permissionName == affectedUser.permission).roleId)
-                            affectedUserDiscord.roles.add(permissionsList.find(x => x.permissionName == params[2]).roleId)
+                                affectedUserDiscord.roles.remove(permissionsList.find(x => x.permissionName == affectedUser.permission).roleId)
+                                affectedUserDiscord.roles.add(permissionsList.find(x => x.permissionName == params[2]).roleId)
 
-                            affectedUser.permission = params[2]
-                            updateUser(affectedUser)
+                                affectedUser.permission = params[2]
+                                updateUser(affectedUser)
 
-                            message.reply(`Permissions and role updated for ${params[1]}.`)
-                        } 
-                        else { message.reply(`User with the name "${params[1]}" does not exist.`) }
+                                message.reply(`Permissions and role updated for ${params[1]}.`)
+                            } 
+                            else { message.reply(`User with the name "${params[1]}" does not exist.`) }
+                        }
+                        else { message.reply(`There is no such permission as ${params[2]}.`)}
                     }
-                    else { message.reply(`There is no such permission as ${params[2]}.`)}
+                    else { message.reply(`You can't update your rank.`)}
+                    
                 }
                 else { message.reply("You don't have permission to change this user's permissions.") }
             }
@@ -62,7 +82,7 @@ export async function resolveCommand(message, commands, dependencies){
                         const affectedUserDiscord = await message.guild.members.fetch(affectedUser.discordId)
 
                         affectedUserDiscord.roles.remove('1239884884210745454')
-                        affectedUserDiscord.roles.add('1239885429717729280')
+                        affectedUserDiscord.roles.remove('1239885429717729280')
 
                         removeUser(affectedUser)
                         message.reply(`User '${params[1]}' has been removed.`)

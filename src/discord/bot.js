@@ -25,7 +25,8 @@ export function startBot(dependencies){
             'createdog',
             'getdogs',
             'removedog',
-            'help'
+            'help',
+            'op'
         ]
         if(!message.author.bot){
             if (message.channel == '1239926064847786014'){ //danubot-commands
