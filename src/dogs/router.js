@@ -8,19 +8,9 @@ const {saveDog, loadDogs, updateDog, removeDog, getDogByBreed} = dependencies
 const dogsRouter = express.Router()
 
 dogsRouter.get('', (req, res, next) => {
-    const filter = req.query.content ? {
-        content: req.query.content
-    } : null
-    const skip = req.query.skip ? parseInt(req.query.skip) : undefined
-    const limit = req.query.limit ? parseInt(req.query.limit) : undefined
-    const sort = {}
-    if (req.query.sortBy) {
-        const [field, direction] = req.query.sortBy.split('_')
-        sort[field] = direction === 'asc' ? 1 : -1
-    }
 
-    loadDogs({ filter, skip, limit, sort, breed: res.locals.breed }).then(dogs => {
-        res.json(dogs)
+    loadDogs().then(dogs => {
+        res.status(200).json(dogs)
     }).catch(next)
 })
 
@@ -28,8 +18,7 @@ dogsRouter.get('/:breed', async (req, res, next) => {
     
     try{
         const dog = await getDogByBreed(req.params.breed)
-        res.json(dog)
-        
+        res.status(200).json(dog)
     } catch(err){
         next(err)
     }

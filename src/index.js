@@ -12,10 +12,6 @@ process.on('unhandledRejection', (reason, promise) => {
 const db = await connectToMongo('mongodb://localhost:27017')
 const app = CreateApp(db)
 
-//const { loadUsers, saveUser, updateUser, removeUser, getUserByName } = db
-//const usersDependencies = { loadUsers, saveUser, updateUser, removeUser, getUserByName }
-//CreateDiscordRouter(usersDependencies)
-
 app.listen(3000, () => {
     console.log('App is running 🚀')
 })

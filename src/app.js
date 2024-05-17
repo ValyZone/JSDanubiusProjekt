@@ -1,15 +1,14 @@
 import express from 'express'
-import { errorHandler, DuplicateItem } from './dogs/error-handling.js'
+import { errorHandler } from './dogs/error-handling.js'
 import CreateDogsRouter from './dogs/router.js'
 import CreateDiscordRouter from './discord/router.js'
 import {dirname, join} from 'node:path'
 import {fileURLToPath} from 'node:url'
-//import { DefaultWebSocketManagerOptions } from 'discord.js'
 
 export function CreateApp(dependencies) {
     const {saveDog, loadDogs, updateDog, removeDog, getDogByBreed, loadUsers, saveUser, updateUser, removeUser, getUserByName } = dependencies
     const breedsDependencies = { saveDog, loadDogs, updateDog, removeDog, getDogByBreed }
-    const usersDependencies = { loadUsers, saveUser, updateUser, removeUser, getUserByName }
+    //const usersDependencies = { loadUsers, saveUser, updateUser, removeUser, getUserByName }
 
     const app = express()
     app.use(express.json())
@@ -151,7 +150,13 @@ export function CreateApp(dependencies) {
     })
 
     app.use("/dogs", CreateDogsRouter(breedsDependencies))
-    app.use("/discord", CreateDiscordRouter(dependencies))
+
+    const {usersRouter, discordClient} = CreateDiscordRouter(dependencies)
+    app.use("/discord", usersRouter)
+
+    app.on('close', () => {
+        discordClient.destroy()
+    })
 
     app.use(errorHandler)
 

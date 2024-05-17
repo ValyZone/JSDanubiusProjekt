@@ -1,36 +1,17 @@
-export class NotFoundError extends Error{
-    constructor(message){
-        super(message)
-        this.name = this.constructor.name
-        if (Error.captureStackTrace)
-        {
-            Error.captureStackTrace(this, this.constructor)
-        }
-    }
-}
-
-export class DuplicateItem extends Error{
-    constructor(message){
-        super(message)
-        this.name = this.constructor.name
-        if (Error.captureStackTrace)
-        {
-            Error.captureStackTrace(this, this.constructor)
-        }
-    }
-}
-
-function mapErrorToStatusCode(err){
-    switch(err.name){
-        case 'NotFoundError':
-            return 404
-        default:
-            return 500
-    }
-}
-
 export function errorHandler(err, req, res, next){
     console.log('There is an error: ', err)
     const code = mapErrorToStatusCode(err)
     res.status(code).send(err.message)
+}
+
+function mapErrorToStatusCode(err){
+    if(err.name == 'NotFoundError'){
+        return 404;
+    }
+    else if(err.code === 11000){
+        return 409
+    }
+    else{
+        return 500
+    }
 }

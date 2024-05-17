@@ -5,14 +5,15 @@ import {startBot} from './bot.js'
 import { addUserZodSchema, updateUserZodSchema } from '../common/schema.js'
 
 function CreateDiscordRouter(dependencies) {
-    const client = startBot(dependencies);
+    const discordClient = startBot(dependencies);
 
     const usersRouter = express.Router();
     const { loadUsers, saveUser, updateUser, removeUser, getUserByName } = dependencies;
 
+
     usersRouter.post('/sendMessage', parser(sendDiscordMessageZodSchema), async (req, res, next) => {
         try {
-            client.channels.cache.get('1239923748988260372').send(res.locals.parsed.message)
+            discordClient.channels.cache.get('1239923748988260372').send(res.locals.parsed.message)
             res.status(201).send("Message sent.");
         } catch (err) {
             next(err);
@@ -22,7 +23,7 @@ function CreateDiscordRouter(dependencies) {
     usersRouter.post('/sendMessage/web',  (req, res, next) => {
         try {
             const { message } = req.body
-            client.channels.cache.get('1239923748988260372').send(message.toString())
+            discordClient.channels.cache.get('1239923748988260372').send(message.toString())
             res.redirect('/danubot/announcement/successful')
         } catch (err) {
             next(err);
@@ -57,7 +58,7 @@ function CreateDiscordRouter(dependencies) {
         }
     })
 
-    return usersRouter;
+    return {usersRouter, discordClient} ;
 }
 
 
