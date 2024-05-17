@@ -29,6 +29,7 @@ export async function resolveCommand(message, commands, dependencies){
                 else {
                     const newUser = user
                     newUser.discordId = message.author.id
+                    newUser.permission = "user"
                     updateUser(newUser)
 
                     const userToUpdate = await message.guild.members.fetch(newUser.discordId)
@@ -75,27 +76,31 @@ export async function resolveCommand(message, commands, dependencies){
             break;
         case 'removeuser':
             if (user) {
-                if (user.permission == 'developer'){
-                    const affectedUser = await getUserByName(params[1])
-
-                    if (affectedUser){
-                        const affectedUserDiscord = await message.guild.members.fetch(affectedUser.discordId)
-
-                        affectedUserDiscord.roles.remove('1239884884210745454')
-                        affectedUserDiscord.roles.remove('1239885429717729280')
-
-                        removeUser(affectedUser)
-                        message.reply(`User '${params[1]}' has been removed.`)
+                if (params[1] != message.author.globalName.toLowerCase()){
+                    if (user.permission == 'developer'){
+                        const affectedUser = await getUserByName(params[1])
+    
+                        if (affectedUser){
+                            const affectedUserDiscord = await message.guild.members.fetch(affectedUser.discordId)
+    
+                            affectedUserDiscord.roles.remove('1239884884210745454')
+                            affectedUserDiscord.roles.remove('1239885429717729280')
+    
+                            removeUser(affectedUser)
+                            message.reply(`User '${params[1]}' has been removed.`)
+                        }
+                        else { message.reply(`User with the name '${params[1]}' doesn't exist.`) }
                     }
-                    else { message.reply(`User with the name '${params[1]}' doesn't exist.`) }
+                    else { message.reply("You don't have permission to remove this user.") }
                 }
-                else { message.reply("You don't have permission to remove this user.") }
+                else { message.reply(`You can't remove yourself.`)}
             }
             else { message.reply("Please register on webapp first with your discord username.") }
             break;
         case 'getdogs':
             if (user) {
-                const dogs = await loadDogs()
+                if (user.permission != "not registered"){
+                    const dogs = await loadDogs()
                 let idx = 1
                 dogs.forEach(dog => message.client.channels.cache.get('1239926064847786014').send(
                 `[${idx++}]------------------------------------------\n
@@ -104,6 +109,8 @@ export async function resolveCommand(message, commands, dependencies){
                 **Description**: ${dog.description}`
                 ))
                 message.client.channels.cache.get('1239926064847786014').send('---------------------------------------------')
+                }
+                else { message.reply("Please register with '!reg' to use this command.") }
             }
             else { message.reply("Please register on webapp first with your discord username.") }
             break;

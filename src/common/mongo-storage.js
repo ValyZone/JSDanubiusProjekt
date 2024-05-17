@@ -57,7 +57,7 @@ export async function connectToMongo(dbUrl){
             await usersCollection.insertOne(
             {
                 name : user.name,
-                permission : 'user',
+                permission : 'not registered',
                 discordId : 'null'
             })
         },
