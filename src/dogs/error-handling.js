@@ -1,5 +1,4 @@
 export function errorHandler(err, req, res, next){
-    console.log('There is an error: ', err)
     const code = mapErrorToStatusCode(err)
     res.status(code).send(err.message)
 }

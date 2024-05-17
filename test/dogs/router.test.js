@@ -1,5 +1,5 @@
 import {describe, it, mock, before, after} from 'node:test'
-import {strictEqual, rejects, doesNotReject} from 'node:assert'
+import {strictEqual, rejects, doesNotReject, throws} from 'node:assert'
 import request from 'supertest'
 import {CreateApp} from './../../src/app.js'
 import { MongoClient } from 'mongodb'
@@ -29,6 +29,7 @@ describe('saveDog', () => {
         await mongoClient.connect();
         db = mongoClient.db('test');
         collection = db.collection('dogs');
+        await collection.createIndex( {breed: 1}, {unique: true} )
     });
 
     after(async () => {
@@ -44,13 +45,32 @@ describe('saveDog', () => {
     
 
     it('Successful Addition of a new Dog', async () => {
-        await mongoClient.db('test').collection('dogs').createIndex( {breed: 1}, {unique: true} )
+        const db = await mongoClient.db('test').collection('dogs')
+        db.createIndex( {breed: 1}, {unique: true} )
         
         const app = CreateApp({
             loadDogs: () => { collection.find().toArray() },
             saveDog: async (dog) => {
-                const { _id, ...dataWithoutId } = dog
-                return await mongoClient.db('test').collection('dogs').insertOne(dataWithoutId)
+                return await db.insertOne(dog)
+            }
+        })
+
+        const testDog = {breed: "teszt", origin: "elek", description: "this is a description for this test dog"}
+
+        const response = await request(app).post('/dogs').send(testDog)
+
+        strictEqual(response.statusCode, 201);
+        strictEqual(response.text, 'teszt created.');
+    })
+
+    it('Successful Addition of a new Dog without origin and description', async () => {
+        const db = await mongoClient.db('test').collection('dogs2')
+        db.createIndex( {breed: 1}, {unique: true} )
+        
+        const app = CreateApp({
+            loadDogs: () => { collection.find().toArray() },
+            saveDog: async (dog) => {
+                return db.insertOne(dog)
             }
         })
 
@@ -63,22 +83,18 @@ describe('saveDog', () => {
     })
 
     it('Unsuccessful addition of a new Dog, duplicate', async () => {
-        const db = await mongoClient.db('test').collection('dogs2')
+        const db = await mongoClient.db('test').collection('dogs3')
         db.createIndex( {breed: 1}, {unique: true} )
 
         const testDog = {breed: "teszt", origin: "elek", description: "this is a description for this test dog"}
-
-        const { _id, ...dataWithoutId } = testDog;
-        await db.insertOne(dataWithoutId)
+        await db.insertOne(testDog)
 
         const testDog2 = {breed: "teszt", origin: "elek2", description: "this shouldn't be added"}
 
         const app = CreateApp({
             loadDogs: () => { collection.find().toArray() },
-            saveDog: async (dog) => {
-                const { _id, ...dataWithoutId2 } = dog;
-                
-                return await db.insertOne(dataWithoutId2)
+            saveDog: async (dog) => {                
+                return await db.insertOne(dog)
             }
         })
 
