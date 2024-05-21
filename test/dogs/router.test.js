@@ -74,7 +74,7 @@ describe('saveDog', () => {
             }
         })
 
-        const testDog = {breed: "teszt", origin: "elek", description: "this is a description for this test dog"}
+        const testDog = {breed: "teszt"}
 
         const response = await request(app).post('/dogs').send(testDog)
 
